@@ -1,0 +1,27 @@
+{
+  "name": "test-github-actions",
+  "version": "1.0.0",
+  "description": "run tests in this repo to test out github actions",
+  "main": "example.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "jest",
+    "test:coverage": "npx jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rsg71/test-github-actions.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rsg71/test-github-actions/issues"
+  },
+  "homepage": "https://github.com/rsg71/test-github-actions#readme",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}

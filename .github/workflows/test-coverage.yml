@@ -1,0 +1,53 @@
+name: Code Coverage Check
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  code-coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Jest with coverage
+        run: npm test -- --coverage
+
+      - name: Check code coverage
+        run: |
+          # You can adjust the minimum code coverage threshold here (e.g., 80%).
+          MINIMUM_COVERAGE=80
+          
+          # Extract the code coverage percentage from the Jest output.
+          COVERAGE=$(cat coverage/lcov-report/index.html | grep -oP 'data-cov="[0-9]*\.[0-9]*%"' | grep -oP '[0-9]*\.[0-9]*')
+          
+          # Compare the coverage percentage with the minimum threshold.
+          if (( $(awk 'BEGIN {print ('$COVERAGE' < '$MINIMUM_COVERAGE')}') )); then
+            echo "Code coverage is below the minimum threshold of $MINIMUM_COVERAGE%."
+            exit 1
+          else
+            echo "Code coverage meets the minimum threshold of $MINIMUM_COVERAGE%."
+          fi
+
+# This GitHub Actions workflow will do the following:
+
+# 1. It triggers on every push to the `main` branch.
+# 2. It checks out your repository's code.
+# 3. It sets up Node.js and installs your project's dependencies.
+# 4. It runs Jest with coverage using `npm test -- --coverage`.
+# 5. It parses the code coverage percentage from the Jest coverage report.
+# 6. It compares the coverage percentage with the minimum threshold (you can adjust this threshold as needed).
+# 7. If the coverage is below the threshold, it exits with an error, preventing the merge.
+
+# Make sure to adjust the `MINIMUM_COVERAGE` variable to your desired minimum coverage percentage. You can also customize the workflow further based on your project's specific needs.
