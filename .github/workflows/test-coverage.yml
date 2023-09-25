@@ -34,7 +34,7 @@ jobs:
         run: echo $MINIMUM_COVERAGE
 
       - name: Set coverage
-        run: COVERAGE=$(cat coverage/lcov-report/index.html | grep -oP 'data-cov="[0-9]*\.[0-9]*%"' | grep -oP '[0-9]*\.[0-9]*')
+        run: COVERAGE=$(cat coverage/coverage-final.json | jq -r '.total.lines.pct')
         
       - name: Log coverage
         run: echo $COVERAGE
@@ -44,8 +44,8 @@ jobs:
           # You can adjust the minimum code coverage threshold here (e.g., 80%).
           MINIMUM_COVERAGE=80
           
-          # Extract the code coverage percentage from the Jest output.
-          COVERAGE=$(cat coverage/lcov-report/index.html | grep -oP 'data-cov="[0-9]*\.[0-9]*%"' | grep -oP '[0-9]*\.[0-9]*')
+          # Extract the code coverage report in JSON format
+          COVERAGE=$(cat coverage/coverage-final.json | jq -r '.total.lines.pct')
 
           # Print out values for coverage and minimum coverage
           echo '$COVERAGE'
@@ -59,6 +59,13 @@ jobs:
           else
             echo "Code coverage meets the minimum threshold of $MINIMUM_COVERAGE%."
           fi
+        env: 
+          # Install jq for JSON parsing
+          JQ_VERSION: 1.6
+          JQ_URL: "https://github.com/stedolan/jq/releases/download/jq-${JQ_VERSION}/jq-linux64"
+      
+      - name: Cleanup coverage report
+        run: rm -rf coverage
 
 # This GitHub Actions workflow will do the following:
 
