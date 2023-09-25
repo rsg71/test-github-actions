@@ -27,6 +27,18 @@ jobs:
       - name: Echo files
         run: ls
 
+      - name: Set min coverage
+        run: MINIMUM_COVERAGE=80 
+
+      - name: Log min coverage
+        run: echo $MINIMUM_COVERAGE
+
+      - name: Set coverage
+        run: COVERAGE=$(cat coverage/lcov-report/index.html | grep -oP 'data-cov="[0-9]*\.[0-9]*%"' | grep -oP '[0-9]*\.[0-9]*')
+        
+      - name: Log coverage
+        run: echo $COVERAGE
+
       - name: Check code coverage
         run: |
           # You can adjust the minimum code coverage threshold here (e.g., 80%).
@@ -36,8 +48,8 @@ jobs:
           COVERAGE=$(cat coverage/lcov-report/index.html | grep -oP 'data-cov="[0-9]*\.[0-9]*%"' | grep -oP '[0-9]*\.[0-9]*')
 
           # Print out values for coverage and minimum coverage
-          echo $COVERAGE
-          echo $MINIMUM_COVERAGE
+          echo '$COVERAGE'
+          echo '$MINIMUM_COVERAGE'
 
           
           # Compare the coverage percentage with the minimum threshold.
@@ -54,6 +66,7 @@ jobs:
 # 2. It checks out your repository's code.
 # 3. It sets up Node.js and installs your project's dependencies.
 # 4. It runs Jest with coverage using `npm test -- --coverage`.
+
 # 5. It parses the code coverage percentage from the Jest coverage report.
 # 6. It compares the coverage percentage with the minimum threshold (you can adjust this threshold as needed).
 # 7. If the coverage is below the threshold, it exits with an error, preventing the merge.
