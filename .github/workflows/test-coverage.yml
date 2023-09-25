@@ -24,6 +24,9 @@ jobs:
       - name: Run Jest with coverage
         run: npm test -- --coverage
 
+      - name: Echo files
+        run: ls
+
       - name: Check code coverage
         run: |
           # You can adjust the minimum code coverage threshold here (e.g., 80%).
