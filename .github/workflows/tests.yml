@@ -1,0 +1,44 @@
+# This GitHub Actions workflow will do the following:
+
+# 1. It triggers on every push to the `main` branch.
+# 2. It checks out your repository's code.
+# 3. It sets up Node.js and installs your project's dependencies.
+# 4. It runs Jest with coverage using `npm test -- --coverage`.
+
+name: Check if tests pass before merging to main
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+  merge-if-tests-pass:
+    needs: run-tests
+    runs-on: ubuntu-latest
+    steps:
+       - uses: actions/checkout@v2
+       - uses: everlytic/branch-merge@1.1.2
+         with:
+          github_token: ${{ github.token }}
+          source_ref: ${{ github.ref }}
+          target_branch: 'main'
+          commit_message_template: '[Automated] Merged {source_ref} into target {target_branch}'
