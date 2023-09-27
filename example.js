@@ -11,5 +11,6 @@ const subtract = (num1, num2) => {
 }
 
 module.exports = {
-    addNums
+    addNums,
+    subtract
 }
