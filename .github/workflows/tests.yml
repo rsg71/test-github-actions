@@ -29,7 +29,13 @@ jobs:
         run: npm install
 
       - name: Run tests
-        run: npm test
+        run: npm run test:coverage
+
+#   test-coverage:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
+#       - uses: ArtiomTr/jest-coverage-report-action@v2
 
   merge-if-tests-pass:
     needs: run-tests
